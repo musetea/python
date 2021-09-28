@@ -1,5 +1,5 @@
 import requests
-res = requests.get("http://google.com")
+res = requests.get("https://data.kma.go.kr")
 # res = requests.get("http://nadocoding.tistroy.com")
 # print(res.status_code)
 # requests.codes.ok
