@@ -1,23 +1,30 @@
 import os
 import pygame
-from pygame import display, image
+from pygame import display, image, font, time
 from pygame.constants import K_UP
 
 # 초기화작업
 WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 640
 SPEED = 0.5
+FPS = 30
+FONT_SIZE = 40
 TITLE = "Basic Game"
+WHITE = (255, 255, 255)   # 하얀색
 
 
 pygame.init()
+font.init()
 screen = display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 display.set_caption(TITLE)
+clock = pygame.time.Clock()  # FPS
 
 #
 move_x = 0
 move_y = 0
-clock = pygame.time.Clock()
+gameFont = font.Font(None, FONT_SIZE)
+time_total_sec = 10  # 10초동안게임
+time_tick = time.get_ticks()    # 현재시간정보취득
 
 
 class Charecter:
@@ -33,6 +40,10 @@ class Charecter:
         self.height = self.size[1]
         self.x_pos = (WINDOW_WIDTH // 2) - (self.width // 2)
         self.y_pos = WINDOW_HEIGHT - self.height
+
+    def position(self, x, y):
+        self.x_pos = x - (self.width // 2)
+        self.y_pos = y - self.height
 
     def drawCharacter(self, screen, delta):
 
@@ -52,7 +63,7 @@ class Charecter:
         screen.blit(self.character, (self.x_pos, self.y_pos))
 
     def keyDown(self, key):
-        print(self.to_x, self.to_y)
+        # print(self.to_x, self.to_y)
         if key == pygame.K_LEFT:
             self.to_x -= SPEED
         elif key == pygame.K_RIGHT:
@@ -68,12 +79,21 @@ class Charecter:
         elif key == pygame.K_UP or key == pygame.K_DOWN:
             self.to_y = 0
 
+    def getRect(self):
+        rect = self.character.get_rect()
+        rect.left = self.x_pos
+        rect.top = self.y_pos
+        return rect
+
 
 # gui
 current_dir = os.path.dirname(os.path.realpath(__file__))
 # print(current_dir)
 background = image.load(os.path.join(current_dir, "images/background.png"))
 character = Charecter(os.path.join(current_dir, "images/character.png"))
+enemy = Charecter(os.path.join(current_dir, "images/enemy.png"))
+enemy.position(WINDOW_WIDTH/2, (WINDOW_HEIGHT/2))
+
 # character = image.load(os.path.join(current_dir, "images/character.png"))
 # character_size = character.get_rect().size
 # character_x_pos = (WINDOW_WIDTH//2) - (character_size[0]//2)
@@ -82,7 +102,7 @@ character = Charecter(os.path.join(current_dir, "images/character.png"))
 
 running = True
 while running:
-    delta = clock.tick(30)
+    delta = clock.tick(FPS)
     # 이벤트 루프(체크)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -112,7 +132,28 @@ while running:
     #     character_x_pos = WINDOW_WIDTH - character_size[0]
 
     # screen.blit(character, (character_x_pos, character_y_pos))
+
+    character_rect = character.getRect()
+    enemy_rect = enemy.getRect()
+
+    if character_rect.colliderect(enemy_rect):
+        print("충돌!!!")
+        running = False
+        time.delay(2000)
+
     character.drawCharacter(screen, delta)
+    enemy.drawCharacter(screen, delta)
+
+    # 시간정보
+    elapsed_time = (time.get_ticks() - time_tick) / 1000
+    timer = gameFont.render(
+        str(int((time_total_sec - elapsed_time))), True, WHITE)
+    screen.blit(timer, (10, 10))
+
+    if time_total_sec - elapsed_time <= 0:
+        print("타임아웃")
+        time.delay(2000)
+        running = False
 
     # 화면업데이트
     display.update()
