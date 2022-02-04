@@ -7,3 +7,4 @@ nankan/.vscode/
 nankan/htmlicov/
 kwh/kwh-env/
 __pycache__/
+.pytest_cache/
