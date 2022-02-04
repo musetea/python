@@ -1,1 +1,9 @@
 .history/
+kwh-evn/
+nankan/.history/
+nankan/env/
+nankan/.env
+nankan/.vscode/
+nankan/htmlicov/
+kwh/kwh-env/
+__pycache__/

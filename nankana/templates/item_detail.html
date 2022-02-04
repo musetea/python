@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Item Detail</title>
+{% endblock %}
+
+{% block content%}
+    
+    <h3>Item Detail </h3>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">Title</th>
+                <td>{{item.title}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Description</th>
+                <td>{{item.description}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Posted Date.</th>
+                <td colspan="2">{{item.date_posted}}</td>
+            </tr>
+            <tr>
+                <th scope="row">Owner Email</th>
+                <td colspan="2">{{ user.email}}</td>
+            </tr>
+        </tbody>
+    </table>
+        
+
+    
+{% endblock %}
