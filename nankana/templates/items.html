@@ -7,14 +7,21 @@
 
 {% block content %}
 <div class="container">
+
     <h3>This is Item Homepage</h3>
-        <!-- {{ items }} -->
-        <div class="row">
-            {% for item in items %}
-                <div class="col-md-4">
-                    {% include 'card.html' %}
-                </div>
-            {% endfor %}
+    {% if msg %}
+    <div class="alert alert-success" role="alert">
+        {{msg}}
+    </div>
+    {% endif %}
+
+    <!-- {{ items }} -->
+    <div class="row">
+        {% for item in items %}
+        <div class="col-md-4">
+            {% include 'card.html' %}
         </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
