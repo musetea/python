@@ -20,5 +20,5 @@ async def login(email: str, password: str, db: Session):
                 return (None, token)
             else:
                 return ("Invalid Password", "")
-    except:
-        pass
+    except Exception as e:
+        return (e, "")
